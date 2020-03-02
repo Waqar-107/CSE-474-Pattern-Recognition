@@ -17,13 +17,13 @@ class Object:
 
     def get_mean(self, feature_no):
         sz = len(self.features)
-        temp = np.array(self.features[: sz][feature_no]).astype(float)
+        temp = np.array([i[feature_no] for i in self.features]).astype(float)
 
         return np.mean(temp)
 
     def get_standard_deviation(self, feature_no):
         sz = len(self.features)
-        temp = np.array(self.features[: sz][feature_no]).astype(float)
+        temp = np.array([i[feature_no] for i in self.features]).astype(float)
 
         return np.std(temp)
 
@@ -100,7 +100,7 @@ def test_accuracy():
         class_name = temp[number_of_features]
 
         mx = 0
-        predicted_class = -1
+        predicted_class = ''
         for key in Object_Dictionary:
             obj = Object_Dictionary[key]
 
@@ -115,14 +115,15 @@ def test_accuracy():
 
                 mult *= x
 
-            if mx < mult:
+            if mx <= mult:
                 predicted_class = obj.class_name
                 mx = mult
 
         if predicted_class == class_name:
             correct += 1
         else:
-            wr.write(str(sample) + " " + str(arr) + " " + str(class_name) + " "+ str(predicted_class) + "\n")
+            wr.write("sample no: " + str(sample) + ", feat:" + str(arr[: number_of_features]) \
+                     + ", actual-class:" + str(class_name) + ", predicted-class: " + str(predicted_class) + "\n")
 
     acc = (correct / dataset_size) * 100
     wr.write("accuracy : " + str(acc))
@@ -131,5 +132,6 @@ def test_accuracy():
 
 if __name__ == "__main__":
     read_dataset()
+
     train()
     test_accuracy()

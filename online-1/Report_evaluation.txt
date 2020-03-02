@@ -1,5 +1,5 @@
-49 [8.4629, 10.0512, 1.0] 1 2
-50 [8.8757, 10.9795, 1.0] 1 2
-51 [1.8762, 1.4066, 2.0] 2 1
-52 [1.7446, 1.7209, 2.0] 2 1
+sample no: 49, feat:[8.4629, 10.0512], actual-class:1, predicted-class: 2
+sample no: 50, feat:[8.8757, 10.9795], actual-class:1, predicted-class: 2
+sample no: 51, feat:[1.8762, 1.4066], actual-class:2, predicted-class: 1
+sample no: 52, feat:[1.7446, 1.7209], actual-class:2, predicted-class: 1
 accuracy : 96.0
