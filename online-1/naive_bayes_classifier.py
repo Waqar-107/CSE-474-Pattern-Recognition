@@ -46,7 +46,7 @@ Object_Dictionary = {}
 def read_dataset():
     global number_of_features, number_of_classes, dataset_size, Object_Dictionary
 
-    f = open("./during evaluation/Train.txt", "r")
+    f = open("./during coding/Train.txt", "r")
     lines = f.readlines()
     f.close()
 
@@ -78,11 +78,11 @@ correct = 0
 def test_accuracy():
     global number_of_features, Object_Dictionary, dataset_size, correct
 
-    f = open("./during evaluation/Test.txt", "r")
+    f = open("./during coding/Test.txt", "r")
     lines = f.readlines()
     f.close()
 
-    wr = open("Report_evaluation.txt", "w")
+    wr = open("Report_coding.txt", "w")
 
     sample = 0
     for line in lines:
