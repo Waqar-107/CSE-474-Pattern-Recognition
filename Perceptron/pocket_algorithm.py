@@ -6,6 +6,7 @@ number_of_features = 0
 number_of_classes = 0
 dataset_size = 0
 w = None
+ws = None
 max_itr = 1000
 
 test_file = "./dataset/testLinearlyNonSeparable.txt"
@@ -40,11 +41,14 @@ def read_dataset():
 
 
 def train_model():
-    global w
+    global w, ws
 
     np.random.seed(107)
-    w = np.random.uniform(-1, 1, number_of_features + 1)
-    learning_rate = 0.1
+    w = np.random.uniform(-10, 10, number_of_features + 1)
+    ws = w  # weight vector for best hs
+    hs = 0  # how many got classified correctly
+
+    learning_rate = 0.025
 
     for itr in range(max_itr):
         misclassified = []
@@ -69,6 +73,11 @@ def train_model():
             print("done in", itr, "th iteration")
             break
 
+        # used w to check misclassified
+        if hs < number_of_features - len(misclassified):
+            hs = number_of_features - len(misclassified)
+            ws = w
+
         summation = np.zeros(number_of_features + 1)
         for i in range(len(misclassified)):
             summation += misclassified[i].transpose()[0]
@@ -78,7 +87,7 @@ def train_model():
 
 
 def test_model():
-    global w
+    global ws
     correctly_detected = 0
 
     f = open(test_file, "r")
@@ -92,7 +101,7 @@ def test_model():
         x = np.array(data)
         x = x.reshape(number_of_features + 1, 1)
 
-        prod = np.dot(w, x)[0]
+        prod = np.dot(ws, x)[0]
         if prod >= 0:
             predicted_class = 1
         else:

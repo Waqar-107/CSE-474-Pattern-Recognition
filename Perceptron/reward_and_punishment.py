@@ -1,4 +1,4 @@
-# perceptron algorithm
+# reward and punishment algorithm
 
 import numpy as np
 
@@ -44,37 +44,34 @@ def train_model():
 
     np.random.seed(107)
     w = np.random.uniform(-1, 1, number_of_features + 1)
+    w = w.reshape(number_of_features + 1, 1)
+
     learning_rate = 0.1
 
     for itr in range(max_itr):
-        misclassified = []
-
+        flag = True
         for key in Object_Dictionary.keys():
             for i in range(len(Object_Dictionary[key].features)):
                 x = Object_Dictionary[key].features[i]
                 x = np.append(x, 1)
                 x = x.reshape(number_of_features + 1, 1)
 
-                val = np.dot(w, x)[0]
+                val = np.dot(w.transpose(), x)[0]
 
                 # actually omega1, classified as omega2
-                if key == 1 and val < 0:
-                    misclassified.append(x * -1)
+                if key == 1 and val <= 0:
+                    w = w + learning_rate * x
+                    flag = False
 
                 # actually omega2, classified as omega1
-                elif key == 2 and val > 0:
-                    misclassified.append(x)
+                elif key == 2 and val >= 0:
+                    w = w - learning_rate * x
+                    flag = False
 
-        if len(misclassified) == 0:
-            print("done in", itr, "th iteration")
+        if flag:
+            print("stopping at", itr, "th iteration")
+            print(w)
             break
-
-        summation = np.zeros(number_of_features + 1)
-        for i in range(len(misclassified)):
-            summation += misclassified[i].transpose()[0]
-
-        summation = learning_rate * summation
-        w = w - summation
 
 
 def test_model():
@@ -92,7 +89,7 @@ def test_model():
         x = np.array(data)
         x = x.reshape(number_of_features + 1, 1)
 
-        prod = np.dot(w, x)[0]
+        prod = np.dot(w.transpose(), x)[0]
         if prod >= 0:
             predicted_class = 1
         else:
