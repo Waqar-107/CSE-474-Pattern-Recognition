@@ -1,4 +1,4 @@
-# perceptron algorithm
+# pocket algorithm
 
 import numpy as np
 
@@ -44,11 +44,12 @@ def train_model():
     global w, ws
 
     np.random.seed(107)
-    w = np.random.uniform(-10, 10, number_of_features + 1)
+    w = np.random.uniform(-1, 1, number_of_features + 1)
+
     ws = w  # weight vector for best hs
     hs = 0  # how many got classified correctly
 
-    learning_rate = 0.025
+    learning_rate = 0.1
 
     for itr in range(max_itr):
         misclassified = []
@@ -57,9 +58,9 @@ def train_model():
             for i in range(len(Object_Dictionary[key].features)):
                 x = Object_Dictionary[key].features[i]
                 x = np.append(x, 1)
-                x = x.reshape(number_of_features + 1, 1)
+                x = np.array(x)
 
-                val = np.dot(w, x)[0]
+                val = np.dot(w, x)
 
                 # actually omega1, classified as omega2
                 if key == 1 and val < 0:
@@ -69,18 +70,18 @@ def train_model():
                 elif key == 2 and val > 0:
                     misclassified.append(x)
 
-        if len(misclassified) == 0:
-            print("done in", itr, "th iteration")
-            break
-
-        # used w to check misclassified
-        if hs < number_of_features - len(misclassified):
-            hs = number_of_features - len(misclassified)
+        # w gives less misclassified so update
+        if hs < dataset_size - len(misclassified):
+            hs = dataset_size - len(misclassified)
             ws = w
+
+        if len(misclassified) == 0:
+            print("training done in", itr, "th iteration")
+            break
 
         summation = np.zeros(number_of_features + 1)
         for i in range(len(misclassified)):
-            summation += misclassified[i].transpose()[0]
+            summation += misclassified[i]
 
         summation = learning_rate * summation
         w = w - summation
@@ -99,9 +100,8 @@ def test_model():
         actual_class = int(data[number_of_features])
         data[number_of_features] = 1
         x = np.array(data)
-        x = x.reshape(number_of_features + 1, 1)
 
-        prod = np.dot(ws, x)[0]
+        prod = np.dot(ws, x)
         if prod >= 0:
             predicted_class = 1
         else:

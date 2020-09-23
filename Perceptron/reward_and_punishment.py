@@ -43,7 +43,7 @@ def train_model():
     global w
 
     np.random.seed(107)
-    w = np.random.uniform(-1, 1, number_of_features + 1)
+    w = np.random.uniform(-10, 10, number_of_features + 1)
     w = w.reshape(number_of_features + 1, 1)
 
     learning_rate = 0.1
@@ -64,7 +64,7 @@ def train_model():
                     flag = False
 
                 # actually omega2, classified as omega1
-                elif key == 2 and val >= 0:
+                elif key == 2 and val > 0:
                     w = w - learning_rate * x
                     flag = False
 
