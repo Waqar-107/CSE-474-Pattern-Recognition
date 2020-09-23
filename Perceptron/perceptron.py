@@ -8,8 +8,8 @@ dataset_size = 0
 w = None
 max_itr = 1000
 
-test_file = "./dataset/testLinearlyNonSeparable.txt"
-train_file = "./dataset/trainLinearlyNonSeparable.txt"
+test_file = "./dataset/testLinearlySeparable.txt"
+train_file = "./dataset/trainLinearlySeparable.txt"
 
 
 class Object:
@@ -81,6 +81,7 @@ def train_model():
 def test_model():
     global w
     correctly_detected = 0
+    print("w: ", w)
 
     f = open(test_file, "r")
     lines = f.readlines()
@@ -100,6 +101,12 @@ def test_model():
 
         if predicted_class == actual_class:
             correctly_detected += 1
+        else:
+            data = data[:number_of_features]
+            ans = "(" + str(i + 1) + ") | (" + str(data) + ") | (" + str(
+                actual_class) + ") | (" + str(predicted_class)
+            ")"
+            print(ans)
 
     accuracy = (correctly_detected / dataset_size) * 100
     print("accuracy :", accuracy, "%")

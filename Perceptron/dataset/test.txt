@@ -1,3 +1,0 @@
-old hs: 0. new hs:203. incorrect 197
-old hs: 203. new hs:393. incorrect 7
-old hs: 393. new hs:400. incorrect 0
