@@ -1,11 +1,3 @@
-Perceptron Alogrithm:
+Pocket Algorithm
 
-Sample no: 171. Features: [1.608665812, 3.864370259, 5.29833973, 8.015410672]. Actual class: 2. Predicted class: 1
-Sample no: 172. Features: [2.030374637, 4.634829893, 6.940987113, 8.535902127]. Actual class: 2. Predicted class: 1
-Sample no: 173. Features: [3.992375845, 8.080901131, 12.34340583, 16.05956163]. Actual class: 1. Predicted class: 2
-Sample no: 174. Features: [4.159753575, 7.654566962, 11.77586291, 16.58566104]. Actual class: 1. Predicted class: 2
-Sample no: 175. Features: [2.140333354, 3.668254357, 6.18842916, 8.162844638]. Actual class: 2. Predicted class: 1
-Sample no: 176. Features: [4.312450305, 8.084623177, 11.48604125, 15.18687984]. Actual class: 1. Predicted class: 2
-Sample no: 177. Features: [4.57722904, 8.046616572, 11.29743912, 15.80765912]. Actual class: 1. Predicted class: 2
-Sample no: 178. Features: [3.335158198, 8.351921916, 12.63921605, 15.63565217]. Actual class: 1. Predicted class: 2
-Sample no: 179. Features: [2.068326985, 4.647149543, 6.334827587, 8.015534902]. Actual class: 2. Predicted class: 1
+Accuracy: 100.0

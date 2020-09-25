@@ -1,28 +1,20 @@
-# pocket algorithm
-
 import numpy as np
+import sys
 
 number_of_features = 0
 number_of_classes = 0
 dataset_size = 0
-w = None
+
+dataset = []
+class_names = []
+
 max_itr = 1000
-
-test_file = "./dataset/testLinearlySeparable.txt"
-train_file = "./dataset/trainLinearlySeparable.txt"
-
-
-class Object:
-    def __init__(self, class_name):
-        self.class_name = class_name
-        self.features = []
+seed_val = 107
+np.random.seed(seed_val)
 
 
-Object_Dictionary = {}
-
-
-def read_dataset():
-    global number_of_features, number_of_classes, dataset_size, Object_Dictionary
+def read_dataset(train_file):
+    global number_of_features, number_of_classes, dataset_size, dataset, class_names
 
     f = open(train_file, "r")
     lines = f.readlines()
@@ -31,88 +23,81 @@ def read_dataset():
 
     for i in range(dataset_size):
         data = lines[i + 1].rstrip().split()
-        class_name = int(data[number_of_features])
-
-        if class_name not in Object_Dictionary:
-            Object_Dictionary[class_name] = Object(class_name)
-
-        Object_Dictionary[class_name].features.append(np.array(data[: number_of_features], dtype=float))
+        dataset.append(np.array(data[: number_of_features], dtype=float))
+        class_names.append(int(data[number_of_features]))
 
 
-def train_model():
-    global w
+class Perceptron:
+    def __init__(self):
+        self.w = np.random.uniform(-1, 1, number_of_features + 1)
+        self.learning_rate = 0.1
 
-    np.random.seed(107)
-    w = np.random.uniform(-1, 1, number_of_features + 1)
+    def train_model(self):
+        global dataset, dataset_size, class_names, max_itr
 
-    learning_rate = 0.1
-
-    for itr in range(max_itr):
-        misclassified = []
-
-        for key in Object_Dictionary.keys():
-            for i in range(len(Object_Dictionary[key].features)):
-                x = Object_Dictionary[key].features[i]
+        for itr in range(max_itr):
+            misclassified = []
+            for i in range(dataset_size):
+                x = np.array(dataset[i])
                 x = np.append(x, 1)
-                x = np.array(x)
+                actual_class = class_names[i]
 
-                val = np.dot(w, x)
+                prod = np.dot(self.w, x)
 
-                # actually omega1, classified as omega2
-                if key == 1 and val < 0:
+                if actual_class == 1 and prod < 0:
                     misclassified.append(x * -1)
-
-                # actually omega2, classified as omega1
-                elif key == 2 and val > 0:
+                elif actual_class == 2 and prod >= 0:
                     misclassified.append(x)
 
-        if len(misclassified) == 0:
-            print("training done in", itr, "th iteration")
-            break
+            # all got classified
+            if len(misclassified) == 0:
+                sys.stdout.write("training done at " + str(itr + 1) + "th iteration\n")
+                sys.stdout.write("w: " + str(self.w) + "\n")
+                break
 
-        summation = np.zeros(number_of_features + 1)
-        for i in range(len(misclassified)):
-            summation += misclassified[i]
+            # update w
+            summation = sum(misclassified)
+            self.w = self.w - self.learning_rate * summation
 
-        summation = learning_rate * summation
-        w = w - summation
+    def test_model(self, test_file):
+        global class_names
 
+        correctly_classified = 0
+        results = open("results.txt", "w")
+        results.write("Basic Perceptron Algorithm\n\n")
 
-def test_model():
-    global w
-    correctly_detected = 0
-    print("w: ", w)
+        f = open(test_file, "r")
+        lines = f.readlines()
 
-    f = open(test_file, "r")
-    lines = f.readlines()
+        for i in range(len(lines)):
+            data = list(map(float, lines[i].rstrip().split()))
+            actual_class = int(data[number_of_features])
+            data[number_of_features] = 1
+            data = np.array(data)
 
-    for i in range(dataset_size):
-        data = list(map(float, lines[i].rstrip().split()))
+            prod = np.dot(self.w, data)
 
-        actual_class = int(data[number_of_features])
-        data[number_of_features] = 1
-        x = np.array(data)
+            if prod > 0:
+                predicted_class = 1
+            else:
+                predicted_class = 2
 
-        prod = np.dot(w, x)
-        if prod >= 0:
-            predicted_class = 1
-        else:
-            predicted_class = 2
+            if actual_class == predicted_class:
+                correctly_classified += 1
+            else:
+                results.write("sample no.: " + str(i + 1) + ". feature value: " + str(
+                    data[:number_of_features]) + ". actual class: " + str(actual_class) + ". predicted class: " + str(
+                    predicted_class) + "\n")
 
-        if predicted_class == actual_class:
-            correctly_detected += 1
-        else:
-            data = data[:number_of_features]
-            ans = "(" + str(i + 1) + ") | (" + str(data) + ") | (" + str(
-                actual_class) + ") | (" + str(predicted_class)
-            ")"
-            print(ans)
+        accuracy = (correctly_classified / len(lines)) * 100
+        sys.stdout.write("Correctly classified: " + str(correctly_classified) + "\n")
+        sys.stdout.write("Accuracy: " + str(accuracy))
 
-    accuracy = (correctly_detected / dataset_size) * 100
-    print("accuracy :", accuracy, "%")
+        results.write("Accuracy: " + str(accuracy))
 
 
 if __name__ == "__main__":
-    read_dataset()
-    train_model()
-    test_model()
+    read_dataset("./dataset/trainLinearlySeparable.txt")
+    p = Perceptron()
+    p.train_model()
+    p.test_model("./dataset/testLinearlySeparable.txt")

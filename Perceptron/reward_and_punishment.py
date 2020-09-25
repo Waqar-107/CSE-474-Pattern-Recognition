@@ -1,28 +1,20 @@
 # reward and punishment algorithm
 
 import numpy as np
+import sys
 
 number_of_features = 0
 number_of_classes = 0
 dataset_size = 0
-w = None
+
+dataset = []
+classname = []
+
 max_itr = 1000
 
-test_file = "./dataset/testLinearlyNonSeparable.txt"
-train_file = "./dataset/trainLinearlyNonSeparable.txt"
 
-
-class Object:
-    def __init__(self, class_name):
-        self.class_name = class_name
-        self.features = []
-
-
-Object_Dictionary = {}
-
-
-def read_dataset():
-    global number_of_features, number_of_classes, dataset_size, Object_Dictionary
+def read_dataset(train_file):
+    global number_of_features, number_of_classes, dataset_size, dataset
 
     f = open(train_file, "r")
     lines = f.readlines()
@@ -31,78 +23,80 @@ def read_dataset():
 
     for i in range(dataset_size):
         data = lines[i + 1].rstrip().split()
-        class_name = int(data[number_of_features])
-
-        if class_name not in Object_Dictionary:
-            Object_Dictionary[class_name] = Object(class_name)
-
-        Object_Dictionary[class_name].features.append(np.array(data[: number_of_features], dtype=float))
+        dataset.append(np.array(data, dtype=float))
+        classname.append(int(data[number_of_features]))
 
 
-def train_model():
-    global w
+class Reward_and_Punishment:
+    def __init__(self):
+        self.w = np.zeros(number_of_features + 1)
+        self.learning_rate = 0.1
 
-    np.random.seed(107)
-    w = np.random.uniform(-10, 10, number_of_features + 1)
-    w = w.reshape(number_of_features + 1, 1)
+    def train_model(self):
+        global dataset, classname
 
-    learning_rate = 0.1
+        for itr in range(max_itr):
+            flag = True
+            for i in range(dataset_size):
+                x = dataset[i]
+                actual_class = classname[i]
+                x[number_of_features] = 1.0
 
-    for itr in range(max_itr):
-        flag = True
-        for key in Object_Dictionary.keys():
-            for i in range(len(Object_Dictionary[key].features)):
-                x = Object_Dictionary[key].features[i]
-                x = np.append(x, 1)
-                x = x.reshape(number_of_features + 1, 1)
-
-                val = np.dot(w.transpose(), x)[0]
+                val = np.dot(self.w, x)
 
                 # actually omega1, classified as omega2
-                if key == 1 and val <= 0:
-                    w = w + learning_rate * x
+                if actual_class == 1 and val <= 0.0:
+                    self.w = self.w + self.learning_rate * x
                     flag = False
 
                 # actually omega2, classified as omega1
-                elif key == 2 and val > 0:
-                    w = w - learning_rate * x
+                elif actual_class == 2 and val >= 0.0:
+                    self.w = self.w - self.learning_rate * x
                     flag = False
 
-        if flag:
-            print("stopping at", itr, "th iteration")
-            print(w)
-            break
+            if flag:
+                print("stopping at", itr, "th iteration")
+                print("weight vector", self.w)
+                break
 
+    def test_model(self, test_file):
+        correctly_classified = 0
 
-def test_model():
-    global w
-    correctly_detected = 0
+        results = open("./dataset/results.txt", "w")
+        results.write("Reward and Punishment\n\n")
 
-    f = open(test_file, "r")
-    lines = f.readlines()
+        f = open(test_file, "r")
+        lines = f.readlines()
 
-    for i in range(dataset_size):
-        data = list(map(float, lines[i].rstrip().split()))
+        for i in range(len(lines)):
+            data = list(map(float, lines[i].rstrip().split()))
 
-        actual_class = int(data[number_of_features])
-        data[number_of_features] = 1
-        x = np.array(data)
-        x = x.reshape(number_of_features + 1, 1)
+            actual_class = int(data[number_of_features])
+            data[number_of_features] = 1
+            x = np.array(data)
 
-        prod = np.dot(w.transpose(), x)[0]
-        if prod >= 0:
-            predicted_class = 1
-        else:
-            predicted_class = 2
+            prod = np.dot(self.w, x)
+            if prod >= 0:
+                predicted_class = 1
+            else:
+                predicted_class = 2
 
-        if predicted_class == actual_class:
-            correctly_detected += 1
+            if predicted_class == actual_class:
+                correctly_classified += 1
+            else:
+                results.write("sample no.: " + str(i + 1) + ". feature value: " + str(
+                    data[:number_of_features]) + ". actual class: " + str(actual_class) + ". predicted class: " + str(
+                    predicted_class) + "\n")
 
-    accuracy = (correctly_detected / dataset_size) * 100
-    print("accuracy :", accuracy, "%")
+        accuracy = (correctly_classified / len(lines)) * 100
+        sys.stdout.write("Correctly classified: " + str(correctly_classified) + "\n")
+        sys.stdout.write("Accuracy: " + str(accuracy))
+
+        results.write("Accuracy: " + str(accuracy))
 
 
 if __name__ == "__main__":
-    read_dataset()
-    train_model()
-    test_model()
+    read_dataset("./dataset/trainLinearlyNonSeparable.txt")
+    p = Reward_and_Punishment()
+    p.train_model()
+    p.test_model("./dataset/testLinearlyNonSeparable.txt")

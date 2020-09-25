@@ -1,0 +1,12 @@
+Reward and Punishment
+
+sample no.: 171. feature value: [1.608665812, 3.864370259, 5.29833973, 8.015410672]. actual class: 2. predicted class: 1
+sample no.: 172. feature value: [2.030374637, 4.634829893, 6.940987113, 8.535902127]. actual class: 2. predicted class: 1
+sample no.: 173. feature value: [3.992375845, 8.080901131, 12.34340583, 16.05956163]. actual class: 1. predicted class: 2
+sample no.: 174. feature value: [4.159753575, 7.654566962, 11.77586291, 16.58566104]. actual class: 1. predicted class: 2
+sample no.: 175. feature value: [2.140333354, 3.668254357, 6.18842916, 8.162844638]. actual class: 2. predicted class: 1
+sample no.: 176. feature value: [4.312450305, 8.084623177, 11.48604125, 15.18687984]. actual class: 1. predicted class: 2
+sample no.: 177. feature value: [4.57722904, 8.046616572, 11.29743912, 15.80765912]. actual class: 1. predicted class: 2
+sample no.: 178. feature value: [3.335158198, 8.351921916, 12.63921605, 15.63565217]. actual class: 1. predicted class: 2
+sample no.: 179. feature value: [2.068326985, 4.647149543, 6.334827587, 8.015534902]. actual class: 2. predicted class: 1
+Accuracy: 97.75
