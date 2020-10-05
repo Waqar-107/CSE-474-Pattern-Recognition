@@ -15,7 +15,10 @@ test_file_name = "./dataset/testNN.txt"
 train_file_name = "./dataset/trainNN.txt"
 
 number_of_layer = None
-number_of_nodes_in_each_layer = []
+nodes_in_each_layer = []
+
+parameters = {}
+max_itr = 1
 
 
 def sigmoid(x):
@@ -52,21 +55,51 @@ def read_dataset():
 
 
 def initialize_parameters():
-    global number_of_layer, number_of_nodes_in_each_layer
+    global number_of_layer, nodes_in_each_layer, number_of_classes, number_of_features, \
+        parameters
+
+    # input layer -> hidden layers -> output layers
     number_of_layer = 3
-    number_of_nodes_in_each_layer = [3, 4, number_of_features]
+    nodes_in_each_layer = [number_of_features, 3, 3, number_of_classes]
 
-    assert (number_of_layer == len(number_of_nodes_in_each_layer))
+    assert (number_of_layer == len(nodes_in_each_layer) - 1)
+
+    for i in range(1, number_of_layer + 1, 1):
+        parameters["W" + str(i)] = np.random.rand(nodes_in_each_layer[i] + 1, nodes_in_each_layer[i - 1] + 1) * 0.01
+        assert (parameters["W" + str(i)].shape == (nodes_in_each_layer[i] + 1, nodes_in_each_layer[i - 1] + 1))
 
 
-def forward_propagation():
-    None
+def forward_propagation(input_vector):
+    global number_of_layer, parameters
+
+    Y = np.array(input_vector)
+    Y = np.append(Y, 1)
+    Y = Y.reshape(len(Y), 1)
+
+    for i in range(1, number_of_layer + 1, 1):
+        V = np.dot(parameters["W" + str(i)], Y)
+        Y = sigmoid(V)
+        Y[Y.shape[0] - 1][0] = 1
+
+        # remove the extra row used for bias from final output
+        if i == number_of_layer:
+            Y = np.delete(Y, Y.shape[0] - 1, 0)
 
 
 def backward_propagation():
     None
 
 
+def train():
+    global max_itr, train_x
+
+    dataset_size = len(train_x)
+    for i in range(max_itr):
+        for j in range(dataset_size):
+            forward_propagation(train_x[j])
+
+
 if __name__ == "__main__":
     read_dataset()
     initialize_parameters()
+    train()
