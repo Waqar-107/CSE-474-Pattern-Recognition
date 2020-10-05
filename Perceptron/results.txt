@@ -1,3 +1,12 @@
 Pocket Algorithm
 
-Accuracy: 100.0
+sample no.: 171. feature value: [1.60866581 3.86437026 5.29833973 8.01541067]. actual class: 2. predicted class: 1
+sample no.: 172. feature value: [2.03037464 4.63482989 6.94098711 8.53590213]. actual class: 2. predicted class: 1
+sample no.: 173. feature value: [ 3.99237585  8.08090113 12.34340583 16.05956163]. actual class: 1. predicted class: 2
+sample no.: 174. feature value: [ 4.15975357  7.65456696 11.77586291 16.58566104]. actual class: 1. predicted class: 2
+sample no.: 175. feature value: [2.14033335 3.66825436 6.18842916 8.16284464]. actual class: 2. predicted class: 1
+sample no.: 176. feature value: [ 4.3124503   8.08462318 11.48604125 15.18687984]. actual class: 1. predicted class: 2
+sample no.: 177. feature value: [ 4.57722904  8.04661657 11.29743912 15.80765912]. actual class: 1. predicted class: 2
+sample no.: 178. feature value: [ 3.3351582   8.35192192 12.63921605 15.63565217]. actual class: 1. predicted class: 2
+sample no.: 179. feature value: [2.06832699 4.64714954 6.33482759 8.0155349 ]. actual class: 2. predicted class: 1
+Accuracy: 97.75
