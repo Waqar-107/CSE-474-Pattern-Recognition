@@ -1,12 +1,13 @@
 import numpy as np
+from sklearn import preprocessing
 
 seed_value = 107
 np.random.seed(seed_value)
 
-test_x = []
-test_y = []
-train_x = []
-train_y = []
+test_x = None
+test_y = None
+train_x = None
+train_y = None
 
 number_of_features = None
 number_of_classes = None
@@ -21,8 +22,12 @@ parameters = {}
 max_itr = 1
 
 
-def sigmoid(x):
-    return 1 / (1 + np.exp(-x))
+def sigmoid(val):
+    return 1 / (1 + np.exp(-val))
+
+
+def scale_data(data):
+    print(data.shape)
 
 
 def read_dataset():
@@ -38,20 +43,40 @@ def read_dataset():
     number_of_features = len(lines[0].strip().split()) - 1
     number_of_classes = 0
 
+    features = []
+    classes = []
     for line in lines:
         values = line.strip().split()
-        train_x.append(np.array(values[:number_of_features], dtype=float))
-        train_y.append(int(values[number_of_features]))
+        features.append(values[:number_of_features])
+        classes.append(int(values[number_of_features]))
 
         number_of_classes = max(number_of_classes, int(values[number_of_features]))
+
+    train_x = np.array(features, dtype=float)
+    train_y = np.array(classes, dtype=float).reshape((len(lines), 1))
+
+    assert (train_x.shape == (len(lines), number_of_features))
+    assert (train_y.shape == (len(lines), 1))
 
     # read dataset to test
     test_file = open(test_file_name)
     lines = test_file.readlines()
+
+    features = []
+    classes = []
     for line in lines:
         values = line.strip().split()
-        test_x.append(np.array(values[:number_of_features], dtype=float))
-        test_y.append(int(values[number_of_features]))
+        features.append(values[:number_of_features])
+        classes.append(int(values[number_of_features]))
+
+    test_x = np.array(features, dtype=float)
+    test_y = np.array(classes, dtype=float).reshape((len(lines), 1))
+
+    assert (test_x.shape == (len(lines), number_of_features))
+    assert (test_y.shape == (len(lines), 1))
+
+    # free memories
+    del features, classes, lines
 
 
 def initialize_parameters():
@@ -100,6 +125,9 @@ def train():
 
 
 if __name__ == "__main__":
+    global train_x
+
     read_dataset()
+    scale_data(train_x)
     initialize_parameters()
-    train()
+    # train()
