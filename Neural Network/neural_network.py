@@ -1,5 +1,4 @@
 import numpy as np
-from sklearn import preprocessing
 
 seed_value = 107
 np.random.seed(seed_value)
@@ -26,8 +25,15 @@ def sigmoid(val):
     return 1 / (1 + np.exp(-val))
 
 
-def scale_data(data):
-    print(data.shape)
+def scale_data():
+    global train_x
+
+    dataset_size = train_x.shape[0]
+    for i in range(dataset_size):
+        mean = np.mean(train_x[i])
+        sd = np.mean(train_x[i])
+
+        train_x[i] = (train_x[i] - mean) / sd
 
 
 def read_dataset():
@@ -53,10 +59,12 @@ def read_dataset():
         number_of_classes = max(number_of_classes, int(values[number_of_features]))
 
     train_x = np.array(features, dtype=float)
-    train_y = np.array(classes, dtype=float).reshape((len(lines), 1))
+    train_y = np.zeros((number_of_classes, len(lines)))
+    for i in range(len(lines)):
+        train_y[classes[i] - 1][i] = 1
 
     assert (train_x.shape == (len(lines), number_of_features))
-    assert (train_y.shape == (len(lines), 1))
+    assert (train_y.shape == (number_of_classes, len(lines)))
 
     # read dataset to test
     test_file = open(test_file_name)
@@ -90,8 +98,8 @@ def initialize_parameters():
     assert (number_of_layer == len(nodes_in_each_layer) - 1)
 
     for i in range(1, number_of_layer + 1, 1):
-        parameters["W" + str(i)] = np.random.rand(nodes_in_each_layer[i] + 1, nodes_in_each_layer[i - 1] + 1) * 0.01
-        assert (parameters["W" + str(i)].shape == (nodes_in_each_layer[i] + 1, nodes_in_each_layer[i - 1] + 1))
+        parameters["W" + str(i)] = np.random.rand(nodes_in_each_layer[i], nodes_in_each_layer[i - 1] + 1) * 0.01
+        assert (parameters["W" + str(i)].shape == (nodes_in_each_layer[i], nodes_in_each_layer[i - 1] + 1))
 
 
 def forward_propagation(input_vector):
@@ -104,11 +112,20 @@ def forward_propagation(input_vector):
     for i in range(1, number_of_layer + 1, 1):
         V = np.dot(parameters["W" + str(i)], Y)
         Y = sigmoid(V)
-        Y[Y.shape[0] - 1][0] = 1
 
-        # remove the extra row used for bias from final output
-        if i == number_of_layer:
-            Y = np.delete(Y, Y.shape[0] - 1, 0)
+        # add an extra row for the bias
+        if i < number_of_layer:
+            Y = np.append(Y, 1)
+
+        Y = Y.reshape(len(Y), 1)
+
+    # print("output",Y)
+    return Y
+
+
+def determine_error(Y_hat, Y):
+    E = np.sum((Y_hat - Y) ** 2) / 2
+    return E
 
 
 def backward_propagation():
@@ -116,18 +133,17 @@ def backward_propagation():
 
 
 def train():
-    global max_itr, train_x
+    global max_itr, train_x, train_y, number_of_classes
 
-    dataset_size = len(train_x)
+    dataset_size = train_x.shape[0]
     for i in range(max_itr):
         for j in range(dataset_size):
-            forward_propagation(train_x[j])
+            Y = forward_propagation(train_x[j])
+            E = determine_error(Y, train_y[:, j].reshape(number_of_classes, 1))
 
 
 if __name__ == "__main__":
-    global train_x
-
     read_dataset()
-    scale_data(train_x)
+    scale_data()
     initialize_parameters()
-    # train()
+    train()
