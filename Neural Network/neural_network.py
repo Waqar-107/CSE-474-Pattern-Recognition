@@ -1,6 +1,6 @@
 import numpy as np
 
-seed_value = 107
+seed_value = 1
 np.random.seed(seed_value)
 
 test_x = None
@@ -19,10 +19,15 @@ nodes_in_each_layer = []
 
 parameters = {}
 max_itr = 1
+mu = 0.01
 
 
 def sigmoid(val):
     return 1 / (1 + np.exp(-val))
+
+
+def sigmoid_differentiated(val):
+    None
 
 
 def scale_data():
@@ -30,14 +35,10 @@ def scale_data():
 
     mean = train_x.mean(axis=1).reshape((number_of_features, 1))
     sd = train_x.std(axis=1).reshape((number_of_features, 1))
-
     train_x = (train_x - mean) / sd
-    row_to_add = np.array([1] * train_x.shape[1])
-    train_x = np.vstack((train_x, row_to_add))  # add an extra row of 1's for the bias
 
     mean = test_x.mean(axis=1).reshape((number_of_features, 1))
     sd = test_x.std(axis=1).reshape((number_of_features, 1))
-
     test_x = (test_x - mean) / sd
 
 
@@ -97,39 +98,32 @@ def initialize_parameters():
         parameters
 
     # input layer -> hidden layers -> output layers
-    number_of_layer = 3
-    nodes_in_each_layer = [number_of_features, 3, 3, number_of_classes]
+    number_of_layer = 4
+    nodes_in_each_layer = [number_of_features, 3, 3, 3, number_of_classes]
 
     assert (number_of_layer == len(nodes_in_each_layer) - 1)
 
     for i in range(1, number_of_layer + 1, 1):
-        parameters["W" + str(i)] = np.random.rand(nodes_in_each_layer[i], nodes_in_each_layer[i - 1] + 1)
-        assert (parameters["W" + str(i)].shape == (nodes_in_each_layer[i], nodes_in_each_layer[i - 1] + 1))
+        parameters["W" + str(i)] = np.random.randn(nodes_in_each_layer[i], nodes_in_each_layer[i - 1])
+        assert (parameters["W" + str(i)].shape == (nodes_in_each_layer[i], nodes_in_each_layer[i - 1]))
 
 
 def forward_propagation(input_vector):
     global number_of_layer, parameters
-
+    # 5*500 3*5
     Y = np.array(input_vector)
-    Y = np.append(Y, 1)
-    Y = Y.reshape(len(Y), 1)
-
     for i in range(1, number_of_layer + 1, 1):
         V = np.dot(parameters["W" + str(i)], Y)
         Y = sigmoid(V)
 
-        # add an extra row for the bias
-        if i < number_of_layer:
-            Y = np.append(Y, 1)
-
-        Y = Y.reshape(len(Y), 1)
-
-    print(Y.reshape(1, len(Y)))
     return Y
 
 
 def determine_error(Y_hat, Y):
-    E = np.sum((Y_hat - Y) ** 2) / 2
+    E = ((Y_hat - Y) ** 2)
+    E = np.sum(E, axis=0, keepdims=True) / 2
+    E = np.sum(E)
+
     return E
 
 
@@ -141,12 +135,21 @@ def train():
     global max_itr, train_x, train_y, number_of_classes
 
     for i in range(max_itr):
-        forward_propagation()
+        Y_hat = forward_propagation(train_x)
+        cost = determine_error(Y_hat, train_y)
+        print(cost)
+
         backward_propagation()
 
 
 if __name__ == "__main__":
     read_dataset()
     scale_data()
-    # initialize_parameters()
-    # train()
+    initialize_parameters()
+    train()
+
+    # x = np.array([[3, 5], [4, 7]])
+    # y = np.array([[6, 2], [5, 9]])
+    #
+    # ans = np.sum(x, axis=0)
+    # print(ans)
