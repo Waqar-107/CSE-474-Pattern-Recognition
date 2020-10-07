@@ -26,14 +26,19 @@ def sigmoid(val):
 
 
 def scale_data():
-    global train_x
+    global train_x, test_x, number_of_features
 
-    dataset_size = train_x.shape[0]
-    for i in range(dataset_size):
-        mean = np.mean(train_x[i])
-        sd = np.mean(train_x[i])
+    mean = train_x.mean(axis=1).reshape((number_of_features, 1))
+    sd = train_x.std(axis=1).reshape((number_of_features, 1))
 
-        train_x[i] = (train_x[i] - mean) / sd
+    train_x = (train_x - mean) / sd
+    row_to_add = np.array([1] * train_x.shape[1])
+    train_x = np.vstack((train_x, row_to_add))  # add an extra row of 1's for the bias
+
+    mean = test_x.mean(axis=1).reshape((number_of_features, 1))
+    sd = test_x.std(axis=1).reshape((number_of_features, 1))
+
+    test_x = (test_x - mean) / sd
 
 
 def read_dataset():
@@ -58,12 +63,12 @@ def read_dataset():
 
         number_of_classes = max(number_of_classes, int(values[number_of_features]))
 
-    train_x = np.array(features, dtype=float)
+    train_x = np.array(features, dtype=float).T
     train_y = np.zeros((number_of_classes, len(lines)))
     for i in range(len(lines)):
         train_y[classes[i] - 1][i] = 1
 
-    assert (train_x.shape == (len(lines), number_of_features))
+    assert (train_x.shape == (number_of_features, len(lines)))
     assert (train_y.shape == (number_of_classes, len(lines)))
 
     # read dataset to test
@@ -77,10 +82,10 @@ def read_dataset():
         features.append(values[:number_of_features])
         classes.append(int(values[number_of_features]))
 
-    test_x = np.array(features, dtype=float)
+    test_x = np.array(features, dtype=float).T
     test_y = np.array(classes, dtype=float).reshape((len(lines), 1))
 
-    assert (test_x.shape == (len(lines), number_of_features))
+    assert (test_x.shape == (number_of_features, len(lines)))
     assert (test_y.shape == (len(lines), 1))
 
     # free memories
@@ -98,7 +103,7 @@ def initialize_parameters():
     assert (number_of_layer == len(nodes_in_each_layer) - 1)
 
     for i in range(1, number_of_layer + 1, 1):
-        parameters["W" + str(i)] = np.random.rand(nodes_in_each_layer[i], nodes_in_each_layer[i - 1] + 1) * 0.01
+        parameters["W" + str(i)] = np.random.rand(nodes_in_each_layer[i], nodes_in_each_layer[i - 1] + 1)
         assert (parameters["W" + str(i)].shape == (nodes_in_each_layer[i], nodes_in_each_layer[i - 1] + 1))
 
 
@@ -119,7 +124,7 @@ def forward_propagation(input_vector):
 
         Y = Y.reshape(len(Y), 1)
 
-    # print("output",Y)
+    print(Y.reshape(1, len(Y)))
     return Y
 
 
@@ -135,15 +140,13 @@ def backward_propagation():
 def train():
     global max_itr, train_x, train_y, number_of_classes
 
-    dataset_size = train_x.shape[0]
     for i in range(max_itr):
-        for j in range(dataset_size):
-            Y = forward_propagation(train_x[j])
-            E = determine_error(Y, train_y[:, j].reshape(number_of_classes, 1))
+        forward_propagation()
+        backward_propagation()
 
 
 if __name__ == "__main__":
     read_dataset()
     scale_data()
-    initialize_parameters()
-    train()
+    # initialize_parameters()
+    # train()
