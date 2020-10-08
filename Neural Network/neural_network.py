@@ -1,4 +1,5 @@
 import numpy as np
+import copy
 
 seed_value = 1
 np.random.seed(seed_value)
@@ -27,7 +28,7 @@ def sigmoid(val):
 
 
 def sigmoid_differentiated(val):
-    None
+    return sigmoid(val) * (1 - sigmoid(val))
 
 
 def scale_data():
@@ -110,11 +111,14 @@ def initialize_parameters():
 
 def forward_propagation(input_vector):
     global number_of_layer, parameters
-    # 5*500 3*5
+
     Y = np.array(input_vector)
+    parameters["Y0"] = Y
+
     for i in range(1, number_of_layer + 1, 1):
         V = np.dot(parameters["W" + str(i)], Y)
         Y = sigmoid(V)
+        parameters["Y" + str(i)] = Y
 
     return Y
 
@@ -127,19 +131,58 @@ def determine_error(Y_hat, Y):
     return E
 
 
+def determine_delta_rj(sample_no, layer_no, prev_delta_rj):
+    global number_of_layer, train_y, parameters
+
+    # r == L
+    if layer_no == number_of_layer:
+        delta_rj = np.subtract(parameters["Y" + str(layer_no)][:, sample_no], train_y[:, sample_no])
+        f_dash = sigmoid_differentiated(parameters["Y" + str(layer_no)][:, sample_no])
+        delta_rj = np.multiply(delta_rj, f_dash)
+    else:
+        f_dash = sigmoid_differentiated(parameters["Y" + str(layer_no)][:, sample_no])
+        f_dash = f_dash.reshape((f_dash.shape[0], 1))
+        delta_rj = np.dot(parameters["W" + str(layer_no + 1)], np.diagflat(f_dash))
+        delta_rj = np.dot(prev_delta_rj.T, delta_rj).T
+
+    return delta_rj
+
+
 def backward_propagation():
-    None
+    global number_of_layer, parameters, mu, train_x
+    for i in range(1, number_of_layer + 1, 1):
+        parameters["W_new" + str(i)] = copy.deepcopy(parameters["W" + str(i)])
+
+    dataset_sz = train_x.shape[1]
+    for i in range(dataset_sz):
+        delta_rj = None
+        for j in range(number_of_layer, 0, -1):
+            # W_new = W_old - del_W * mu
+            # del_W = delta_rj * y_(r-1)
+            delta_rj = determine_delta_rj(i, j, delta_rj)
+            delta_rj = delta_rj.reshape((delta_rj.shape[0], 1))
+            parameters["W_new" + str(j)] -= mu * np.dot(delta_rj.T, parameters["Y" + str(j)][:, j - 1].T)
+
+    for i in range(1, number_of_layer + 1, 1):
+        parameters["W" + str(i)] = parameters["W_new" + str(i)]
 
 
 def train():
     global max_itr, train_x, train_y, number_of_classes
 
+    costs = []
+    xs = []
+
     for i in range(max_itr):
         Y_hat = forward_propagation(train_x)
         cost = determine_error(Y_hat, train_y)
-        print(cost)
-
+        xs.append(i)
+        costs.append(cost)
         backward_propagation()
+
+    # plt.figure(1)
+    # plt.plot(xs, costs)
+    # plt.show()
 
 
 if __name__ == "__main__":
@@ -147,9 +190,3 @@ if __name__ == "__main__":
     scale_data()
     initialize_parameters()
     train()
-
-    # x = np.array([[3, 5], [4, 7]])
-    # y = np.array([[6, 2], [5, 9]])
-    #
-    # ans = np.sum(x, axis=0)
-    # print(ans)
