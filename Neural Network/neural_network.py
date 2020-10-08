@@ -5,7 +5,7 @@ seed_value = 1
 np.random.seed(seed_value)
 
 test_x = None
-test_y = None
+test_y = []
 train_x = None
 train_y = None
 
@@ -19,7 +19,7 @@ number_of_layer = None
 nodes_in_each_layer = []
 
 parameters = {}
-max_itr = 1
+max_itr = 500
 mu = 0.01
 
 
@@ -78,17 +78,14 @@ def read_dataset():
     lines = test_file.readlines()
 
     features = []
-    classes = []
     for line in lines:
         values = line.strip().split()
         features.append(values[:number_of_features])
-        classes.append(int(values[number_of_features]))
+        test_y.append(int(values[number_of_features]))
 
     test_x = np.array(features, dtype=float).T
-    test_y = np.array(classes, dtype=float).reshape((len(lines), 1))
 
     assert (test_x.shape == (number_of_features, len(lines)))
-    assert (test_y.shape == (len(lines), 1))
 
     # free memories
     del features, classes, lines
@@ -170,19 +167,37 @@ def backward_propagation():
 def train():
     global max_itr, train_x, train_y, number_of_classes
 
-    costs = []
-    xs = []
-
     for i in range(max_itr):
         Y_hat = forward_propagation(train_x)
         cost = determine_error(Y_hat, train_y)
-        xs.append(i)
-        costs.append(cost)
         backward_propagation()
 
-    # plt.figure(1)
-    # plt.plot(xs, costs)
-    # plt.show()
+
+def test():
+    global test_x, test_y
+
+    correctly_classified = 0
+    misclassified = 0
+
+    Y_hat = forward_propagation(test_x)
+    for i in range(test_x.shape[1]):
+        mx = Y_hat[0, i]
+        predicted = 0
+        for j in range(Y_hat.shape[0]):
+            if Y_hat[j, i] > mx:
+                mx = Y_hat[j, i]
+                predicted = j + 1
+
+        actual_class = test_y[i]
+        if actual_class == predicted:
+            correctly_classified += 1
+        else:
+            misclassified += 1
+            #print("actual:",actual_class, "predicted:", predicted)
+
+    print(misclassified, correctly_classified)
+
+
 
 
 if __name__ == "__main__":
@@ -190,3 +205,4 @@ if __name__ == "__main__":
     scale_data()
     initialize_parameters()
     train()
+    test()
