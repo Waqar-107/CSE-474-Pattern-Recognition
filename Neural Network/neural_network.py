@@ -173,7 +173,8 @@ def train():
     for i in range(max_itr):
         Y_hat = forward_propagation(train_x)
         cost = determine_error(Y_hat, train_y)
-        print(i + 1, cost)
+        print("itr:", i, "cost", cost)
+
         backward_propagation()
 
 
