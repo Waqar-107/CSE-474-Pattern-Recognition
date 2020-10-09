@@ -19,7 +19,7 @@ number_of_layer = None
 nodes_in_each_layer = []
 
 parameters = {}
-max_itr = 500
+max_itr = 1000
 mu = 0.01
 
 
@@ -116,6 +116,7 @@ def forward_propagation(input_vector):
         V = np.dot(parameters["W" + str(i)], Y)
         Y = sigmoid(V)
         parameters["Y" + str(i)] = Y
+        parameters["V" + str(i)] = V
 
     return Y
 
@@ -134,10 +135,10 @@ def determine_delta_rj(sample_no, layer_no, prev_delta_rj):
     # r == L
     if layer_no == number_of_layer:
         delta_rj = np.subtract(parameters["Y" + str(layer_no)][:, sample_no], train_y[:, sample_no])
-        f_dash = sigmoid_differentiated(parameters["Y" + str(layer_no)][:, sample_no])
+        f_dash = sigmoid_differentiated(parameters["V" + str(layer_no)][:, sample_no])
         delta_rj = np.multiply(delta_rj, f_dash)
     else:
-        f_dash = sigmoid_differentiated(parameters["Y" + str(layer_no)][:, sample_no])
+        f_dash = sigmoid_differentiated(parameters["V" + str(layer_no)][:, sample_no])
         f_dash = f_dash.reshape((f_dash.shape[0], 1))
         delta_rj = np.dot(parameters["W" + str(layer_no + 1)], np.diagflat(f_dash))
         delta_rj = np.dot(prev_delta_rj.T, delta_rj).T
@@ -158,7 +159,9 @@ def backward_propagation():
             # del_W = delta_rj * y_(r-1)
             delta_rj = determine_delta_rj(i, j, delta_rj)
             delta_rj = delta_rj.reshape((delta_rj.shape[0], 1))
-            parameters["W_new" + str(j)] -= mu * np.dot(delta_rj.T, parameters["Y" + str(j)][:, j - 1].T)
+
+            sz = len(parameters["Y" + str(j - 1)][:, i])
+            parameters["W_new" + str(j)] -= mu * np.dot(delta_rj, parameters["Y" + str(j - 1)][:, i].reshape((1, sz)))
 
     for i in range(1, number_of_layer + 1, 1):
         parameters["W" + str(i)] = parameters["W_new" + str(i)]
@@ -170,11 +173,12 @@ def train():
     for i in range(max_itr):
         Y_hat = forward_propagation(train_x)
         cost = determine_error(Y_hat, train_y)
+        print(i + 1, cost)
         backward_propagation()
 
 
 def test():
-    global test_x, test_y
+    global test_x, test_y, parameters, number_of_layer
 
     correctly_classified = 0
     misclassified = 0
@@ -193,11 +197,11 @@ def test():
             correctly_classified += 1
         else:
             misclassified += 1
-            #print("actual:",actual_class, "predicted:", predicted)
+            # print("actual:",actual_class, "predicted:", predicted)
 
     print(misclassified, correctly_classified)
-
-
+    accuracy = (correctly_classified * 100) / (misclassified + correctly_classified)
+    print(accuracy)
 
 
 if __name__ == "__main__":
