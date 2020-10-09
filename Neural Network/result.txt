@@ -1,0 +1,97 @@
+sample no: 2. feature values: [0.5577194  0.42359018 0.45403648 0.43159088]. actual class: 3. predicted class:4
+sample no: 13. feature values: [0.48030349 0.43152597 0.47171733 0.47082381]. actual class: 3. predicted class:4
+sample no: 18. feature values: [-0.49577706 -0.40812695 -0.51356074 -0.44836714]. actual class: 2. predicted class:1
+sample no: 23. feature values: [0.45544656 0.47536574 0.49984565 0.46624439]. actual class: 3. predicted class:4
+sample no: 25. feature values: [0.46008286 0.44058    0.45724459 0.51527128]. actual class: 3. predicted class:4
+sample no: 33. feature values: [0.44115079 0.48684324 0.47292127 0.4557067 ]. actual class: 3. predicted class:4
+sample no: 42. feature values: [0.57169032 0.45052094 0.45962655 0.46999844]. actual class: 3. predicted class:4
+sample no: 48. feature values: [0.49826873 0.52302159 0.40615308 0.48222486]. actual class: 3. predicted class:4
+sample no: 57. feature values: [0.43269937 0.41463972 0.47521174 0.47543981]. actual class: 3. predicted class:4
+sample no: 61. feature values: [0.43103988 0.48149657 0.47984867 0.46258539]. actual class: 3. predicted class:4
+sample no: 66. feature values: [0.49244985 0.51468496 0.46558146 0.43583963]. actual class: 3. predicted class:4
+sample no: 69. feature values: [0.42490822 0.49153015 0.5120776  0.47448181]. actual class: 3. predicted class:4
+sample no: 77. feature values: [0.48431307 0.41397522 0.49831723 0.4692047 ]. actual class: 3. predicted class:4
+sample no: 87. feature values: [0.44661609 0.46252018 0.48104349 0.47989989]. actual class: 3. predicted class:4
+sample no: 97. feature values: [0.47739271 0.46620323 0.44672221 0.4824964 ]. actual class: 3. predicted class:4
+sample no: 106. feature values: [-0.53350088 -0.45267314 -0.48858141 -0.45749958]. actual class: 2. predicted class:1
+sample no: 109. feature values: [-0.55672636 -0.38882224 -0.42518746 -0.4767646 ]. actual class: 2. predicted class:1
+sample no: 110. feature values: [0.57552044 0.45725617 0.42241765 0.44269433]. actual class: 3. predicted class:4
+sample no: 120. feature values: [0.45468462 0.48625157 0.46640479 0.44641753]. actual class: 3. predicted class:4
+sample no: 121. feature values: [0.55719651 0.43037783 0.45461237 0.46535323]. actual class: 3. predicted class:4
+sample no: 130. feature values: [0.46901249 0.50190109 0.4594445  0.47051461]. actual class: 3. predicted class:4
+sample no: 133. feature values: [0.54506672 0.40539743 0.5132942  0.49244444]. actual class: 3. predicted class:4
+sample no: 134. feature values: [0.46963761 0.52233437 0.47081517 0.44057267]. actual class: 3. predicted class:4
+sample no: 135. feature values: [0.52774719 0.54682326 0.44211112 0.44099599]. actual class: 3. predicted class:4
+sample no: 143. feature values: [0.51631626 0.43590834 0.48115425 0.48235381]. actual class: 3. predicted class:4
+sample no: 147. feature values: [0.56398865 0.50930044 0.5164194  0.46851182]. actual class: 3. predicted class:4
+sample no: 148. feature values: [0.51543047 0.44082849 0.45741387 0.42418861]. actual class: 3. predicted class:4
+sample no: 150. feature values: [0.4236913  0.43267373 0.48933871 0.46506429]. actual class: 3. predicted class:4
+sample no: 151. feature values: [0.50593232 0.47791435 0.49027947 0.41271585]. actual class: 3. predicted class:4
+sample no: 154. feature values: [0.47035638 0.50527705 0.44217634 0.47280836]. actual class: 3. predicted class:4
+sample no: 158. feature values: [0.52041549 0.4852918  0.47180923 0.48532831]. actual class: 3. predicted class:4
+sample no: 159. feature values: [0.46817383 0.46827186 0.43927615 0.46376346]. actual class: 3. predicted class:4
+sample no: 169. feature values: [0.50820282 0.43834818 0.46763305 0.43827191]. actual class: 3. predicted class:4
+sample no: 173. feature values: [0.43473378 0.36825316 0.481854   0.45827007]. actual class: 3. predicted class:4
+sample no: 174. feature values: [0.50333465 0.47295002 0.38002052 0.45676365]. actual class: 3. predicted class:4
+sample no: 177. feature values: [0.58236735 0.47107068 0.44141291 0.44530008]. actual class: 3. predicted class:4
+sample no: 178. feature values: [0.47099319 0.46820121 0.47549465 0.48217406]. actual class: 3. predicted class:4
+sample no: 182. feature values: [0.5453059  0.4322989  0.47220654 0.48947896]. actual class: 3. predicted class:4
+sample no: 187. feature values: [0.48099468 0.48807353 0.49047283 0.48195182]. actual class: 3. predicted class:4
+sample no: 189. feature values: [0.57838131 0.40278911 0.48802285 0.49026834]. actual class: 3. predicted class:4
+sample no: 209. feature values: [0.44215664 0.42004788 0.40103878 0.48246752]. actual class: 3. predicted class:4
+sample no: 211. feature values: [0.50390131 0.48403759 0.43468179 0.45953362]. actual class: 3. predicted class:4
+sample no: 228. feature values: [0.48055912 0.4302613  0.43770259 0.46526446]. actual class: 3. predicted class:4
+sample no: 233. feature values: [0.52980876 0.49254157 0.46843661 0.4624788 ]. actual class: 3. predicted class:4
+sample no: 234. feature values: [0.54747111 0.48470862 0.46382062 0.46662717]. actual class: 3. predicted class:4
+sample no: 238. feature values: [0.45228045 0.47343532 0.47585206 0.45226831]. actual class: 3. predicted class:4
+sample no: 240. feature values: [0.51885398 0.42238849 0.49930382 0.48024087]. actual class: 3. predicted class:4
+sample no: 242. feature values: [0.49428689 0.56410651 0.47954312 0.49004527]. actual class: 3. predicted class:4
+sample no: 254. feature values: [0.43403011 0.51431509 0.48383062 0.47723222]. actual class: 3. predicted class:4
+sample no: 255. feature values: [0.51605865 0.4967818  0.46484169 0.43166347]. actual class: 3. predicted class:4
+sample no: 266. feature values: [0.42786184 0.42321112 0.49644643 0.47073924]. actual class: 3. predicted class:4
+sample no: 267. feature values: [0.58818798 0.45296327 0.48189282 0.46311319]. actual class: 3. predicted class:4
+sample no: 268. feature values: [0.4886636  0.40334378 0.47095225 0.48073505]. actual class: 3. predicted class:4
+sample no: 273. feature values: [0.48397146 0.50368962 0.40082044 0.45824255]. actual class: 3. predicted class:4
+sample no: 276. feature values: [0.48576178 0.4499595  0.47821056 0.43602547]. actual class: 3. predicted class:4
+sample no: 279. feature values: [0.46940183 0.56747377 0.46902778 0.45010584]. actual class: 3. predicted class:4
+sample no: 280. feature values: [0.52068905 0.49773598 0.42105746 0.4491343 ]. actual class: 3. predicted class:4
+sample no: 286. feature values: [0.46603076 0.43495727 0.46628754 0.44108242]. actual class: 3. predicted class:4
+sample no: 291. feature values: [0.4647449  0.47706438 0.44828137 0.46074246]. actual class: 3. predicted class:4
+sample no: 293. feature values: [0.55958259 0.43061738 0.47629375 0.43546898]. actual class: 3. predicted class:4
+sample no: 300. feature values: [0.53243416 0.45026605 0.50472553 0.47354651]. actual class: 3. predicted class:4
+sample no: 306. feature values: [-0.58907811 -0.43812172 -0.44450965 -0.44782922]. actual class: 2. predicted class:1
+sample no: 313. feature values: [0.46729135 0.44302753 0.45103456 0.50449795]. actual class: 3. predicted class:4
+sample no: 320. feature values: [0.49481098 0.45507047 0.41981888 0.45143636]. actual class: 3. predicted class:4
+sample no: 322. feature values: [-0.5368641  -0.43281041 -0.52418365 -0.45806882]. actual class: 2. predicted class:1
+sample no: 325. feature values: [0.48850777 0.44103682 0.50382693 0.46090599]. actual class: 3. predicted class:4
+sample no: 327. feature values: [0.49908553 0.47575697 0.47474921 0.45619531]. actual class: 3. predicted class:4
+sample no: 339. feature values: [0.47477237 0.44789264 0.46688402 0.44967739]. actual class: 3. predicted class:4
+sample no: 342. feature values: [0.54205239 0.48782751 0.42353584 0.47780438]. actual class: 3. predicted class:4
+sample no: 347. feature values: [-0.54466828 -0.38169084 -0.45502737 -0.42847047]. actual class: 2. predicted class:1
+sample no: 352. feature values: [0.48380041 0.44968114 0.48026049 0.51036455]. actual class: 3. predicted class:4
+sample no: 366. feature values: [0.52491458 0.38786215 0.41469971 0.4527632 ]. actual class: 3. predicted class:4
+sample no: 371. feature values: [0.43753748 0.41893743 0.49671744 0.44331785]. actual class: 3. predicted class:4
+sample no: 390. feature values: [0.56805683 0.45356702 0.48209862 0.43581872]. actual class: 3. predicted class:4
+sample no: 392. feature values: [0.47981279 0.4377668  0.48009554 0.44773212]. actual class: 3. predicted class:4
+sample no: 394. feature values: [0.47638671 0.39821357 0.46749274 0.48121253]. actual class: 3. predicted class:4
+sample no: 400. feature values: [0.44324151 0.40456332 0.47842484 0.4598337 ]. actual class: 3. predicted class:4
+sample no: 403. feature values: [0.47778474 0.50345611 0.40256916 0.46611685]. actual class: 3. predicted class:4
+sample no: 421. feature values: [0.47580722 0.4029341  0.48549287 0.45777724]. actual class: 3. predicted class:4
+sample no: 424. feature values: [0.56805448 0.48591972 0.4823461  0.45586927]. actual class: 3. predicted class:4
+sample no: 428. feature values: [0.49036871 0.44881707 0.45893736 0.50003049]. actual class: 3. predicted class:4
+sample no: 436. feature values: [0.50774434 0.44949416 0.50867879 0.43776915]. actual class: 3. predicted class:4
+sample no: 438. feature values: [0.52987651 0.46588354 0.46034506 0.46571622]. actual class: 3. predicted class:4
+sample no: 444. feature values: [0.45394181 0.49616338 0.44570383 0.44981643]. actual class: 3. predicted class:4
+sample no: 447. feature values: [0.50210948 0.52324789 0.49834598 0.47376984]. actual class: 3. predicted class:4
+sample no: 450. feature values: [-0.55783912 -0.4286964  -0.45094962 -0.44622387]. actual class: 2. predicted class:1
+sample no: 452. feature values: [-0.55800278 -0.47295665 -0.44855828 -0.43102679]. actual class: 2. predicted class:1
+sample no: 453. feature values: [0.47998584 0.51057199 0.51130775 0.47357015]. actual class: 3. predicted class:4
+sample no: 464. feature values: [0.44653568 0.48086028 0.49359464 0.436346  ]. actual class: 3. predicted class:4
+sample no: 465. feature values: [-0.5835336  -0.44504837 -0.43044418 -0.40297069]. actual class: 2. predicted class:1
+sample no: 466. feature values: [0.44972796 0.46646661 0.48280599 0.44962095]. actual class: 3. predicted class:4
+sample no: 477. feature values: [0.4781777  0.49782237 0.47301313 0.49625497]. actual class: 3. predicted class:4
+sample no: 479. feature values: [0.53648355 0.46856267 0.44941831 0.46287594]. actual class: 3. predicted class:4
+sample no: 490. feature values: [0.50953934 0.43432931 0.49426825 0.47194537]. actual class: 3. predicted class:4
+correctly classified: 406
+misclassified: 94
+accuracy: 81.2

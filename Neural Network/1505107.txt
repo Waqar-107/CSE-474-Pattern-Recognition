@@ -1,1 +1,15 @@
-layers: 3. no. of nodes: [4, 3, 3, 4]. accuracy: 100.0layers: 2. no. of nodes: [4, 6, 4]. accuracy: 100.0
+layers: 3. no. of nodes: [4, 3, 3, 4]. accuracy: 100.0
+layers: 2. no. of nodes: [4, 6, 4]. accuracy: 100.0
+layers: 4. no. of nodes: [4, 5, 6, 7, 4]. accuracy: 100.0
+layers: 5. no. of nodes: [4, 2, 4, 5, 6, 4]. accuracy: 100.0
+layers: 4. no. of nodes: [4, 4, 3, 5, 4]. accuracy: 100.0
+layers: 3. no. of nodes: [4, 3, 4, 4]. accuracy: 100.0
+layers: 4. no. of nodes: [4, 5, 6, 7, 4]. accuracy: 100.0
+layers: 4. no. of nodes: [4, 7, 5, 4, 4]. accuracy: 100.0
+layers: 4. no. of nodes: [4, 3, 2, 6, 4]. accuracy: 100.0
+layers: 6. no. of nodes: [4, 39, 22, 2, 28, 31, 4]. accuracy: 100.0
+layers: 10. no. of nodes: [4, 5, 6, 7, 8, 15, 8, 7, 6, 5, 4]. accuracy: 49.0
+layers: 5. no. of nodes: [4, 10, 15, 30, 30, 4]. accuracy: 100.0
+layers: 4. no. of nodes: [4, 6, 2, 4, 4]. accuracy: 100.0
+layers: 4. no. of nodes: [4, 5, 2, 5, 4]. accuracy: 100.0
+layers: 5. no. of nodes: [4, 13, 12, 16, 20, 4]. accuracy: 100.0

@@ -193,6 +193,7 @@ def test():
 
     correctly_classified = 0
     misclassified = 0
+    result = open("result.txt", "w")
 
     Y_hat = forward_propagation(test_x)
     for i in range(test_x.shape[1]):
@@ -208,13 +209,15 @@ def test():
             correctly_classified += 1
         else:
             misclassified += 1
+            result.write(
+                "sample no: " + str(i + 1) + ". feature values: " + str(test_x[:, i]) + ". actual class: " + str(
+                    actual_class) + ". predicted class:" + str(predicted) + "\n")
 
     accuracy = (correctly_classified * 100) / (misclassified + correctly_classified)
 
-    res = open("1505107.txt", "a")
-    res.write("layers: " + str(number_of_layer) + ". no. of nodes: " + str(nodes_in_each_layer) + ". accuracy: " + str(
-        accuracy))
-    res.close()
+    result.write("correctly classified: " + str(correctly_classified) + "\n")
+    result.write("misclassified: " + str(misclassified) + "\n")
+    result.write("accuracy: " + str(accuracy))
 
 
 if __name__ == "__main__":
@@ -223,15 +226,20 @@ if __name__ == "__main__":
 
     networks = [
         [number_of_features, 3, 3, number_of_classes],
-        [number_of_features, 6, number_of_classes],
-        [number_of_features, 5, 6, 7, number_of_classes],
-        [number_of_features, 2, 4, 5, 6, number_of_classes],
-        [number_of_features, 4, 3, 5, number_of_classes],
-        [number_of_features, 3, 4, number_of_classes],
-        [number_of_features, 5, 6, 7, number_of_classes],
-        [number_of_features, 7, 5, 4, number_of_classes],
-        [number_of_features, 3, 2, 6, number_of_classes],
-        [number_of_features, 39, 22, 2, 28, 31, number_of_classes]
+        # [number_of_features, 6, number_of_classes],
+        # [number_of_features, 5, 6, 7, number_of_classes],
+        # [number_of_features, 2, 4, 5, 6, number_of_classes],
+        # [number_of_features, 4, 3, 5, number_of_classes],
+        # [number_of_features, 3, 4, number_of_classes],
+        # [number_of_features, 5, 6, 7, number_of_classes],
+        # [number_of_features, 7, 5, 4, number_of_classes],
+        # [number_of_features, 3, 2, 6, number_of_classes],
+        # [number_of_features, 39, 22, 2, 28, 31, number_of_classes],
+        # [number_of_features, 5, 6, 7, 8, 15, 8, 7, 6, 5, number_of_classes],
+        # [number_of_features, 10, 15, 30, 30, number_of_classes],
+        # [number_of_features, 6, 2, 4, number_of_classes],
+        # [number_of_features, 5, 2, 5, number_of_classes],
+        # [number_of_features, 13, 12, 16, 20, number_of_classes],
     ]
 
     for n in networks:
