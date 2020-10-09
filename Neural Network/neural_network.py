@@ -186,7 +186,7 @@ def test():
     Y_hat = forward_propagation(test_x)
     for i in range(test_x.shape[1]):
         mx = Y_hat[0, i]
-        predicted = 0
+        predicted = 1
         for j in range(Y_hat.shape[0]):
             if Y_hat[j, i] > mx:
                 mx = Y_hat[j, i]
@@ -197,11 +197,9 @@ def test():
             correctly_classified += 1
         else:
             misclassified += 1
-            # print("actual:",actual_class, "predicted:", predicted)
 
-    print(misclassified, correctly_classified)
     accuracy = (correctly_classified * 100) / (misclassified + correctly_classified)
-    print(accuracy)
+    print("accuracy:", accuracy)
 
 
 if __name__ == "__main__":
