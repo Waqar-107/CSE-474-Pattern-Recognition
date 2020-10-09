@@ -1,0 +1,1 @@
+layers: 3. no. of nodes: [4, 3, 3, 4]. accuracy: 100.0layers: 2. no. of nodes: [4, 6, 4]. accuracy: 100.0

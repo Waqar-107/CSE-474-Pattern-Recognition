@@ -70,6 +70,8 @@ def read_dataset():
     for i in range(len(lines)):
         train_y[classes[i] - 1][i] = 1
 
+    # train_x : (number of features, dataset size)
+    # train_y : (number of classes, dataset size)
     assert (train_x.shape == (number_of_features, len(lines)))
     assert (train_y.shape == (number_of_classes, len(lines)))
 
@@ -85,21 +87,21 @@ def read_dataset():
 
     test_x = np.array(features, dtype=float).T
 
+    # test_x : (number of features, dataset size)
+    # train_y : simple 1D array
     assert (test_x.shape == (number_of_features, len(lines)))
 
     # free memories
     del features, classes, lines
 
 
-def initialize_parameters():
-    global number_of_layer, nodes_in_each_layer, number_of_classes, number_of_features, \
-        parameters
+def initialize_parameters(network_description):
+    global number_of_layer, nodes_in_each_layer, number_of_classes, number_of_features, parameters
+    parameters = {}
 
     # input layer -> hidden layers -> output layers
-    number_of_layer = 4
-    nodes_in_each_layer = [number_of_features, 3, 3, 3, number_of_classes]
-
-    assert (number_of_layer == len(nodes_in_each_layer) - 1)
+    number_of_layer = len(network_description) - 1
+    nodes_in_each_layer = network_description
 
     for i in range(1, number_of_layer + 1, 1):
         parameters["W" + str(i)] = np.random.randn(nodes_in_each_layer[i], nodes_in_each_layer[i - 1])
@@ -109,10 +111,14 @@ def initialize_parameters():
 def forward_propagation(input_vector):
     global number_of_layer, parameters
 
+    # Y: (features, dataset size)
     Y = np.array(input_vector)
     parameters["Y0"] = Y
 
     for i in range(1, number_of_layer + 1, 1):
+        # Wi: (nodes in ith, nodes in i-1th)
+        # Y: (nodes in i-1th, dataset size)
+        # V: (nodes in ith, dataset size)
         V = np.dot(parameters["W" + str(i)], Y)
         Y = sigmoid(V)
         parameters["Y" + str(i)] = Y
@@ -159,8 +165,11 @@ def backward_propagation():
             # del_W = delta_rj * y_(r-1)
             delta_rj = determine_delta_rj(i, j, delta_rj)
             delta_rj = delta_rj.reshape((delta_rj.shape[0], 1))
-
             sz = len(parameters["Y" + str(j - 1)][:, i])
+
+            # W: (nodes in jth layer, nodes in j-1th layer)
+            # delta_rj: (nodes in jth layer, 1)
+            # Y: (1, nodes in the j-1th layer)
             parameters["W_new" + str(j)] -= mu * np.dot(delta_rj, parameters["Y" + str(j - 1)][:, i].reshape((1, sz)))
 
     for i in range(1, number_of_layer + 1, 1):
@@ -171,15 +180,16 @@ def train():
     global max_itr, train_x, train_y, number_of_classes
 
     for i in range(max_itr):
+        # Y_hat: (number of classes, dataset size)
         Y_hat = forward_propagation(train_x)
         cost = determine_error(Y_hat, train_y)
-        print("itr:", i, "cost", cost)
+        # print("itr:", i, "cost", cost)
 
         backward_propagation()
 
 
 def test():
-    global test_x, test_y, parameters, number_of_layer
+    global test_x, test_y, parameters, number_of_layer, nodes_in_each_layer
 
     correctly_classified = 0
     misclassified = 0
@@ -200,12 +210,31 @@ def test():
             misclassified += 1
 
     accuracy = (correctly_classified * 100) / (misclassified + correctly_classified)
-    print("accuracy:", accuracy)
+
+    res = open("1505107.txt", "a")
+    res.write("layers: " + str(number_of_layer) + ". no. of nodes: " + str(nodes_in_each_layer) + ". accuracy: " + str(
+        accuracy))
+    res.close()
 
 
 if __name__ == "__main__":
     read_dataset()
     scale_data()
-    initialize_parameters()
-    train()
-    test()
+
+    networks = [
+        [number_of_features, 3, 3, number_of_classes],
+        [number_of_features, 6, number_of_classes],
+        [number_of_features, 5, 6, 7, number_of_classes],
+        [number_of_features, 2, 4, 5, 6, number_of_classes],
+        [number_of_features, 4, 3, 5, number_of_classes],
+        [number_of_features, 3, 4, number_of_classes],
+        [number_of_features, 5, 6, 7, number_of_classes],
+        [number_of_features, 7, 5, 4, number_of_classes],
+        [number_of_features, 3, 2, 6, number_of_classes],
+        [number_of_features, 39, 22, 2, 28, 31, number_of_classes]
+    ]
+
+    for n in networks:
+        initialize_parameters(n)
+        train()
+        test()
