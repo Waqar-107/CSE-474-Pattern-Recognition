@@ -7,10 +7,10 @@ import numpy as np
 def calculate_dist(ref, test, idx, jdx):
     M = ref.shape[0]
     N = ref.shape[1]
-    test_partial = test[idx: idx + M, jdx: jdx + N]
+    test_partial = test[idx: idx + M, jdx: jdx + N].astype(np.int64)
 
     # sum(diff in each cell ^ 2)
-    ans = np.absolute(ref - test_partial)
+    ans = np.absolute(ref.astype(np.int64) - test_partial)
     ans = ans * ans
 
     return np.sum(ans)
@@ -38,17 +38,10 @@ def exhaustive_search(ref, test):
     # now that we have i, j selected we draw a red box
     # note that cv2 keeps the image in BGR format, not RGB!
     rgb_test = cv2.cvtColor(test, cv2.COLOR_GRAY2BGR)
-    color = [0, 0, 255]
 
-    for i in range(selected_i, selected_i + M):
-        for c in range(3):
-            rgb_test[i][selected_j][c] = color[c]
-            rgb_test[i][selected_j + N - 1][c] = color[c]
-
-    for j in range(selected_j, selected_j + N):
-        for c in range(3):
-            rgb_test[selected_i][j][c] = color[c]
-            rgb_test[selected_i + M - 1][j][c] = color[c]
+    # cv2.rectangle(img, (x1, y1), (x2, y2), color, thickness)
+    # i denotes row, so Y-axis, j denotes column, so X-axis
+    cv2.rectangle(rgb_test, (selected_j, selected_i), (selected_j + N, selected_i + M), (0, 0, 255), 2)
 
     cv2.imshow("exhaustive search result", rgb_test)
     cv2.waitKey()
