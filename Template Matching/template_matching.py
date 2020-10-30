@@ -56,7 +56,13 @@ def exhaustive_search(ref, test):
 
 
 if __name__ == "__main__":
-    ref_img = cv2.imread("./io/reference.jpg", 0)
-    test_img = cv2.imread("./io/main.PNG", 0)
+    capture = cv2.VideoCapture("./io/input.mov")
+    video_frames = []
 
-    exhaustive_search(ref_img, test_img)
+    while True:
+        ret, frame = capture.read()
+
+        if not ret:
+            break
+
+    capture.release()
