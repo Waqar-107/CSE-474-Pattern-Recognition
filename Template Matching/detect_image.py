@@ -2,6 +2,7 @@
 
 import cv2
 import numpy as np
+import time
 
 
 def calculate_dist(ref, test, idx, jdx):
@@ -17,6 +18,8 @@ def calculate_dist(ref, test, idx, jdx):
 
 
 def exhaustive_search(ref, test):
+    start = time.time()
+
     M = ref.shape[0]
     N = ref.shape[1]
     I = test.shape[0]
@@ -35,6 +38,7 @@ def exhaustive_search(ref, test):
                 selected_j = j
 
     print(selected_i, selected_j, min_dist)
+    print("time taken:", time.time() - start)
     # now that we have i, j selected we draw a red box
     # note that cv2 keeps the image in BGR format, not RGB!
     rgb_test = cv2.cvtColor(test, cv2.COLOR_GRAY2BGR)
