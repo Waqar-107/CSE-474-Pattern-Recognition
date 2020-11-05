@@ -25,6 +25,8 @@ def exhaustive_search(ref, test):
     I = test.shape[0]
     J = test.shape[1]
 
+    print(ref.shape, test.shape)
+
     min_dist = np.inf
     selected_i = 0
     selected_j = 0
