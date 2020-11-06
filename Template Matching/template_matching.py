@@ -196,7 +196,6 @@ def hierarchical_search(ref, frames, p, fps, video: bool):
                         selected_j = j
 
         else:
-            # -------------------------------------------------------
             # step 1
             # create level 0, 1, 2
             image_levels_ref = [ref_image]
@@ -205,95 +204,38 @@ def hierarchical_search(ref, frames, p, fps, video: bool):
                 image_levels_ref.append(cv2.pyrDown(image_levels_ref[i - 1]))
                 image_levels_test.append(cv2.pyrDown(image_levels_test[i - 1]))
 
-            # -------------------------------------------------------
-            # step 2
-            min_dist = np.inf
-            selected_i = 0
-            selected_j = 0
+            temp_p = [p // 4, 1, 1]
+            center_i = [prev_i // 4]
+            center_j = [prev_j // 4]
 
-            temp_p = int(p / 4.0)
-            center_i = prev_i // 4
-            center_j = prev_j // 4
+            # step 2-4
+            for i in range(3):
+                min_dist = np.inf
+                selected_i = 0
+                selected_j = 0
 
-            points_x = [center_j - temp_p, center_j, center_j + temp_p]
-            points_y = [center_i - temp_p, center_i, center_i + temp_p]
-            I = image_levels_test[2].shape[0]
-            J = image_levels_test[2].shape[1]
-            M = image_levels_ref[2].shape[0]
-            N = image_levels_ref[2].shape[1]
-            for y in points_y:
-                for x in points_x:
-                    if y < 0 or y > I - M or x < 0 or x > J - N:
-                        continue
+                points_x = [center_j[i] - temp_p[i], center_j[i], center_j[i] + temp_p[i]]
+                points_y = [center_i[i] - temp_p[i], center_i[i], center_i[i] + temp_p[i]]
 
-                    dist = calculate_dist(image_levels_ref[2], image_levels_test[2], y, x)
-                    search += 1
-                    if dist < min_dist:
-                        min_dist = dist
-                        selected_i = y
-                        selected_j = x
+                temp_I = image_levels_test[2 - i].shape[0]
+                temp_J = image_levels_test[2 - i].shape[1]
+                temp_M = image_levels_ref[2 - i].shape[0]
+                temp_N = image_levels_ref[2 - i].shape[1]
 
-            y1 = selected_i
-            x1 = selected_j
+                for y in points_y:
+                    for x in points_x:
+                        if y < 0 or y > temp_I - temp_M or x < 0 or x > temp_J - temp_N:
+                            continue
 
-            # -------------------------------------------------------
-            # step 3
-            min_dist = np.inf
-            selected_i = 0
-            selected_j = 0
+                        dist = calculate_dist(image_levels_ref[2 - i], image_levels_test[2 - i], y, x)
+                        search += 1
+                        if dist < min_dist:
+                            min_dist = dist
+                            selected_i = y
+                            selected_j = x
 
-            temp_p = 1
-            center_i = int(2 * y1)
-            center_j = int(2 * x1)
-
-            points_x = [center_j - temp_p, center_j, center_j + temp_p]
-            points_y = [center_i - temp_p, center_i, center_i + temp_p]
-            I = image_levels_test[1].shape[0]
-            J = image_levels_test[1].shape[1]
-            M = image_levels_ref[1].shape[0]
-            N = image_levels_ref[1].shape[1]
-            for y in points_y:
-                for x in points_x:
-                    if y < 0 or y > I - M or x < 0 or x > J - N:
-                        continue
-
-                    dist = calculate_dist(image_levels_ref[1], image_levels_test[1], y, x)
-                    search += 1
-                    if dist < min_dist:
-                        min_dist = dist
-                        selected_i = y
-                        selected_j = x
-
-            y2 = selected_i
-            x2 = selected_j
-
-            # -------------------------------------------------------
-            # step 4
-            min_dist = np.inf
-            selected_i = 0
-            selected_j = 0
-
-            temp_p = 1
-            center_i = int(2 * y2)
-            center_j = int(2 * x2)
-
-            points_x = [center_j - temp_p, center_j, center_j + temp_p]
-            points_y = [center_i - temp_p, center_i, center_i + temp_p]
-            I = image_levels_test[0].shape[0]
-            J = image_levels_test[0].shape[1]
-            M = image_levels_ref[0].shape[0]
-            N = image_levels_ref[0].shape[1]
-            for y in points_y:
-                for x in points_x:
-                    if y < 0 or y > I - M or x < 0 or x > J - N:
-                        continue
-
-                    dist = calculate_dist(image_levels_ref[0], image_levels_test[0], y, x)
-                    search += 1
-                    if dist < min_dist:
-                        min_dist = dist
-                        selected_i = y
-                        selected_j = x
+                center_i.append(selected_i * 2)
+                center_j.append(selected_j * 2)
 
         rgb_test = cv2.cvtColor(frames[f], cv2.COLOR_GRAY2BGR)
         cv2.rectangle(rgb_test, (selected_j, selected_i), (selected_j + N, selected_i + M), (0, 0, 255), 2)
