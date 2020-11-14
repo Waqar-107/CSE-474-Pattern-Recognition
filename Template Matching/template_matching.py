@@ -81,9 +81,8 @@ def exhaustive_search(ref, frames, p, fps, video: bool):
     # write the video file
     if video:
         save_video(output_frames, fps, J, I, "./io/exhaustive.mov")
-    print("exhaustive done in", time.time() - start, "seconds")
 
-    return search / len(frames)
+    return search / len(frames), time.time() - start
 
 
 def logarithmic_search(ref, frames, p, fps, video: bool):
@@ -159,9 +158,8 @@ def logarithmic_search(ref, frames, p, fps, video: bool):
     # write the video file
     if video:
         save_video(output_frames, fps, J, I, "./io/logarithmic_search.mov")
-    print("2D logarithmic search done in", time.time() - start, "seconds")
 
-    return search / len(frames)
+    return search / len(frames), time.time() - start
 
 
 def hierarchical_search(ref, frames, p, fps, video: bool):
@@ -248,9 +246,8 @@ def hierarchical_search(ref, frames, p, fps, video: bool):
     # write the video file
     if video:
         save_video(output_frames, fps, J, I, "./io/hierarchical_search.mov")
-    print("hierarchical search done in", time.time() - start, "seconds")
 
-    return search / len(frames)
+    return search / len(frames), time.time() - start
 
 
 if __name__ == "__main__":
@@ -279,14 +276,26 @@ if __name__ == "__main__":
 
     # -------------------------------------------
     # run the algorithms
-    _p = 8
+    # _p = [4, 8, 12, 16, 20]
+    _p = [4]
+    per_frame_avg = []
 
-    # exhaustive search
-    # exhaustive_search(ref_image, video_frames, _p, _fps, True)
+    report = open("1505107.txt", "w")
+    report.write("------------------------------------------------------\n")
+    report.write("p     Exhaustive          2D Log          Hierarchical\n")
 
-    # 2D logarithmic search
-    # logarithmic_search(ref_image, video_frames, _p, _fps, True)
+    for i in range(len(_p)):
+        report.write(str(_p[i]) + "     ")
 
-    # hierarchical search
-    hierarchical_search(ref_image, video_frames, _p, _fps, True)
+        # exhaustive search
+        avg = exhaustive_search(ref_image, video_frames, _p[i], _fps, True)
+        report.write(str(round(avg[0], 2)) + "          ")
+
+        # 2D logarithmic search
+        avg = logarithmic_search(ref_image, video_frames, _p[i], _fps, True)
+        report.write(str(round(avg[0], 2)) + "          ")
+
+        # hierarchical search
+        avg = hierarchical_search(ref_image, video_frames, _p[i], _fps, True)
+        report.write(str(round(avg[0], 2)) + "\n")
     # -------------------------------------------
