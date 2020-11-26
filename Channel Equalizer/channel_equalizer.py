@@ -29,7 +29,7 @@ sigma = np.sqrt(float(params.readline()))
 
 # read the train file
 train_file = open("train.txt", "r")
-train_bits = train_file.readline()
+train_bits = list(map(int, train_file.readline()))
 
 # build the sample
 training_samples = []
@@ -44,6 +44,13 @@ training_samples = np.array(training_samples)
 
 # determine Xk = sum(h * I) + noise
 Xk = np.dot(training_samples, h) + np.random.normal(loc=0, scale=sigma)
+Xk_bar = []
+for i in range(len(Xk) - l + 1):
+    Xk_bar.append([])
+    for j in range(l):
+        Xk_bar[-1].append(Xk[i + j])
+
+Xk_bar = np.array(Xk_bar)
 
 cluster_quantity = np.power(2, n + l - 1)
 transitional_probabilities = np.zeros((cluster_quantity, cluster_quantity))
