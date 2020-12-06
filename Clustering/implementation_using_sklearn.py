@@ -100,7 +100,7 @@ class Solution:
 
 
 np.random.seed(118)
-solve = Solution("./data/bisecting.txt", 4)
+solve = Solution("./data/blobs.txt", 4)
 solve.estimate_eps()
 solve.run_dbscan()
 
@@ -110,4 +110,6 @@ blob - eps: 0.06
 moon - eps: 0.05
 
 https://towardsdatascience.com/k-means-vs-dbscan-clustering-49f8e627de27
+https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.NearestNeighbors.html
+https://towardsdatascience.com/a-simple-introduction-to-k-nearest-neighbors-algorithm-b3519ed98e
 """
