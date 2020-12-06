@@ -1,6 +1,7 @@
 # from dust i have come, dust i will be
 
 import matplotlib.pyplot as plt
+from sklearn.neighbors import NearestNeighbors
 import numpy as np
 import sys
 
@@ -33,35 +34,26 @@ class Solution:
 
         self.cluster = [0] * len(self.dataset)
         self.vis = [False] * len(self.dataset)
-        self.colors = ['#585d8a', '#858482', '#23ccc9', '#e31712', '#91f881', '#89b84f', '#fedb00', '#0527f9',
-                       '#571d08', '#ffae00', '#b31d5b', '#702d75']
+        self.colors = ['#585d8a', '#858482', '#23ccc9', '#e31712', '#91f881', '#89b84f', '#fedb00', '#0527f9', '#571d08',
+                       '#ffae00', '#b31d5b', '#702d75']
 
     @staticmethod
     def euclidean_distance(a, b):
         return np.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)
 
     def estimate_eps(self):
-        dist = []
-        for i in range(len(self.dataset)):
-            temp = []
-            for j in range(len(self.dataset)):
-                if i != j:
-                    temp.append(self.euclidean_distance(self.dataset[i], self.dataset[j]))
+        neighbors = NearestNeighbors(n_neighbors=self.k_nearest)
+        neighbors_fit = neighbors.fit(self.dataset)
+        distances, indices = neighbors_fit.kneighbors(self.dataset)
 
-            temp.sort()
-            dist.append(temp[self.k_nearest - 1])
-
-        X = [i for i in range(len(self.dataset))]
-
-        dist.sort()
-
-        plt.figure(1)
-        plt.plot(X, dist)
+        distances = np.sort(distances, axis=0)
+        distances = distances[:, 1]
+        plt.plot(distances, color='#23ccc9')
         plt.grid()
         plt.show()
 
-        self.eps = float(input("what is the estimated eps?"))
-        self.min_pts = self.k_nearest
+        # from the plot
+        self.eps = float(input("what is the estimated eps from the plot?"))
 
     def run_dbscan_util(self, src, c):
         self.cluster[src] = c
@@ -107,7 +99,8 @@ class Solution:
         plt.show()
 
 
-solve = Solution("./data/blobs.txt", 4)
+np.random.seed(118)
+solve = Solution("./data/bisecting.txt", 4)
 solve.estimate_eps()
 solve.run_dbscan()
 
