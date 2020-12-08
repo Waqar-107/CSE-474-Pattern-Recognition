@@ -4,8 +4,10 @@ import matplotlib.pyplot as plt
 from sklearn.neighbors import NearestNeighbors
 import numpy as np
 import sys
+from copy import deepcopy
 
 sys.setrecursionlimit(10000)
+max_itr = 1000
 
 
 class Solution:
@@ -14,6 +16,7 @@ class Solution:
         self.eps = 0
         self.min_pts = k_nearest
         self.dataset = []
+        self.number_of_cluster = 0
 
         file = open(dataset_file, "r")
         lines = file.readlines()
@@ -34,7 +37,8 @@ class Solution:
 
         self.cluster = [0] * len(self.dataset)
         self.vis = [False] * len(self.dataset)
-        self.colors = ['#585d8a', '#858482', '#23ccc9', '#e31712', '#91f881', '#89b84f', '#fedb00', '#0527f9', '#571d08',
+        self.colors = ['#585d8a', '#858482', '#23ccc9', '#e31712', '#91f881', '#89b84f', '#fedb00', '#0527f9',
+                       '#571d08',
                        '#ffae00', '#b31d5b', '#702d75']
 
     @staticmethod
@@ -47,7 +51,7 @@ class Solution:
         distances, indices = neighbors_fit.kneighbors(self.dataset)
 
         distances = np.sort(distances, axis=0)
-        distances = distances[:, 1]
+        distances = distances[:, self.k_nearest - 1]
         plt.plot(distances, color='#23ccc9')
         plt.grid()
         plt.show()
@@ -88,6 +92,8 @@ class Solution:
             self.run_dbscan_util(p, c)
 
         print("total clusters formed:", c)
+        self.number_of_cluster = c
+
         plt.figure(2)
         for i in range(len(self.dataset)):
             if self.cluster[i]:
@@ -98,15 +104,74 @@ class Solution:
 
         plt.show()
 
+    def k_means(self):
+        self.number_of_cluster = 12
+
+        centroid_idx = np.random.randint(low=0, high=len(self.dataset), size=self.number_of_cluster)
+        centroids = []
+        for i in range(self.number_of_cluster):
+            centroids.append(self.dataset[centroid_idx[i]])
+
+        temp_clusters = [-1] * len(self.dataset)
+        dist = [np.inf] * len(self.dataset)
+
+        for itr in range(max_itr):
+            print("iteration -", itr)
+
+            # for all find the closest centroid
+            for i in range(len(self.dataset)):
+                dist[i] = np.inf
+                for j in range(self.number_of_cluster):
+                    d = self.euclidean_distance(centroids[j], self.dataset[i])
+                    if d < dist[i]:
+                        dist[i] = d
+                        temp_clusters[i] = j
+
+            # find out new centroids
+            clusters = [[] for _ in range(self.number_of_cluster)]
+            for i in range(len(self.dataset)):
+                clusters[temp_clusters[i]].append(self.dataset[i])
+
+            new_centroids = []
+            for i in range(self.number_of_cluster):
+                c = np.array(clusters[i])
+                mean = np.average(c, axis=0)
+                new_centroids.append(mean)
+
+            flag = True
+            for i in range(self.number_of_cluster):
+                a = np.abs(centroids[i] - new_centroids[i])
+                print(a)
+                if (a != 0).any():
+                    flag = False
+            print()
+            if flag:
+                break
+
+            centroids = deepcopy(new_centroids)
+
+        plt.figure(3)
+        for i in range(len(self.dataset)):
+            if temp_clusters[i] >= 0:
+                c = temp_clusters[i] % len(self.colors)
+                c = self.colors[c]
+
+                plt.scatter(self.dataset[i][0], self.dataset[i][1], color=c)
+
+        for c in centroids:
+            plt.scatter(c[0], c[1], color='#000000', marker='p', linewidths=5)
+        plt.show()
+
 
 np.random.seed(118)
-solve = Solution("./data/blobs.txt", 4)
-solve.estimate_eps()
-solve.run_dbscan()
+solve = Solution("./data/bisecting.txt", 4)
+# solve.estimate_eps()
+# solve.run_dbscan()
+solve.k_means()
 
 """
-bisecting - eps: 0.025
-blob - eps: 0.06
+bisecting - eps: 0.030
+blob - eps: 0.08
 moon - eps: 0.05
 
 https://towardsdatascience.com/k-means-vs-dbscan-clustering-49f8e627de27
