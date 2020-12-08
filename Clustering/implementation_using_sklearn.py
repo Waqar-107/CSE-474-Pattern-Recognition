@@ -105,8 +105,9 @@ class Solution:
         plt.show()
 
     def k_means(self):
-        self.number_of_cluster = 12
+        self.number_of_cluster = 2
 
+        np.random.shuffle(self.dataset)
         centroid_idx = np.random.randint(low=0, high=len(self.dataset), size=self.number_of_cluster)
         centroids = []
         for i in range(self.number_of_cluster):
@@ -164,7 +165,7 @@ class Solution:
 
 
 np.random.seed(118)
-solve = Solution("./data/bisecting.txt", 4)
+solve = Solution("./data/moons.txt", 4)
 # solve.estimate_eps()
 # solve.run_dbscan()
 solve.k_means()
