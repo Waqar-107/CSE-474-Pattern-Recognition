@@ -47,30 +47,6 @@ class Solution:
     def euclidean_distance(a, b):
         return np.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)
 
-    # takes O(n^2 * log(n)) time. almost 60s here
-    def estimate_eps_brute_force_approach(self):
-        dist = []
-        for i in range(len(self.dataset)):
-            temp = []
-            for j in range(len(self.dataset)):
-                if i != j:
-                    temp.append(self.euclidean_distance(self.dataset[i], self.dataset[j]))
-
-            temp.sort()
-            dist.append(temp[self.k_nearest - 1])
-
-        X = [i for i in range(len(self.dataset))]
-
-        dist.sort()
-
-        plt.figure(1)
-        plt.plot(X, dist)
-        plt.grid()
-        plt.show()
-
-        self.eps = float(input("what is the estimated eps?"))
-        self.min_pts = self.k_nearest
-
     # uses NearestNeighbors from sklearn
     # first we tell it the value of k, then we feed it with data
     # after that it returns distances of first k nearest neighbors.
