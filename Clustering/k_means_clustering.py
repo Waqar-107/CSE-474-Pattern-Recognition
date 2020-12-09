@@ -32,6 +32,8 @@ class Solution:
 
             self.dataset.append([x, y])
 
+        self.dataset.sort(key=lambda xy: (xy[0], xy[1]))
+
         self.dataset = np.array(self.dataset)
         self.dataset /= np.array([mx, my])
 
@@ -45,6 +47,34 @@ class Solution:
     def euclidean_distance(a, b):
         return np.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)
 
+    # takes O(n^2 * log(n)) time. almost 60s here
+    def estimate_eps_brute_force_approach(self):
+        dist = []
+        for i in range(len(self.dataset)):
+            temp = []
+            for j in range(len(self.dataset)):
+                if i != j:
+                    temp.append(self.euclidean_distance(self.dataset[i], self.dataset[j]))
+
+            temp.sort()
+            dist.append(temp[self.k_nearest - 1])
+
+        X = [i for i in range(len(self.dataset))]
+
+        dist.sort()
+
+        plt.figure(1)
+        plt.plot(X, dist)
+        plt.grid()
+        plt.show()
+
+        self.eps = float(input("what is the estimated eps?"))
+        self.min_pts = self.k_nearest
+
+    # uses NearestNeighbors from sklearn
+    # first we tell it the value of k, then we feed it with data
+    # after that it returns distances of first k nearest neighbors.
+    # we can explicitly tell it to use particular data structures too(ball-tree, kd-tree etc.)
     def estimate_eps(self):
         neighbors = NearestNeighbors(n_neighbors=self.k_nearest)
         neighbors_fit = neighbors.fit(self.dataset)
@@ -105,10 +135,11 @@ class Solution:
         plt.show()
 
     def k_means(self):
-        self.number_of_cluster = 2
+        centroid_idx = []
+        interval = len(self.dataset) // self.number_of_cluster
+        for i in range(self.number_of_cluster):
+            centroid_idx.append((interval * i))
 
-        np.random.shuffle(self.dataset)
-        centroid_idx = np.random.randint(low=0, high=len(self.dataset), size=self.number_of_cluster)
         centroids = []
         for i in range(self.number_of_cluster):
             centroids.append(self.dataset[centroid_idx[i]])
@@ -142,10 +173,9 @@ class Solution:
             flag = True
             for i in range(self.number_of_cluster):
                 a = np.abs(centroids[i] - new_centroids[i])
-                print(a)
                 if (a != 0).any():
                     flag = False
-            print()
+
             if flag:
                 break
 
@@ -166,16 +196,15 @@ class Solution:
 
 np.random.seed(118)
 solve = Solution("./data/moons.txt", 4)
-# solve.estimate_eps()
-# solve.run_dbscan()
+solve.estimate_eps()
+solve.run_dbscan()
 solve.k_means()
 
 """
-bisecting - eps: 0.030
+bisecting - eps: 0.03
 blob - eps: 0.08
-moon - eps: 0.05
+moon - eps: 0.06
 
 https://towardsdatascience.com/k-means-vs-dbscan-clustering-49f8e627de27
 https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.NearestNeighbors.html
-https://towardsdatascience.com/a-simple-introduction-to-k-nearest-neighbors-algorithm-b3519ed98e
 """
