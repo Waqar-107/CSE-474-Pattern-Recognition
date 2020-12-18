@@ -40,8 +40,7 @@ class Solution:
         self.cluster = [0] * len(self.dataset)
         self.vis = [False] * len(self.dataset)
         self.colors = ['#585d8a', '#858482', '#23ccc9', '#e31712', '#91f881', '#89b84f', '#fedb00', '#0527f9',
-                       '#571d08',
-                       '#ffae00', '#b31d5b', '#702d75']
+                       '#571d08', '#ffae00', '#b31d5b', '#702d75']
 
     @staticmethod
     def euclidean_distance(a, b):
